@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tokens', function (Blueprint $table) {
-            $table->id('id_token');
-            $table->integer('id_user');
-            $table->text('value');
-            $table->string('jti');
-            $table->string('type');
-            $table->integer('pair')->nullable();
-            $table->string('payload')->nullable();
+        Schema::create('banks', function (Blueprint $table) {
+            $table->id('id_bank');
+            $table->string('nama_bank');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tokens');
+        Schema::dropIfExists('banks');
     }
 };

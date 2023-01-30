@@ -18,19 +18,16 @@ class AuthController extends Controller
             'password'  => 'required|min:8|confirmed'
         ]);
 
-        //if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        //create user
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => bcrypt($request->password)
         ]);
 
-        //return response JSON user is created
         if($user) {
             return response()->json([
                 'success' => true,
@@ -38,7 +35,6 @@ class AuthController extends Controller
             ], 201);
         }
 
-        //return JSON process insert failed 
         return response()->json([
             'success' => false,
         ], 409);
@@ -62,28 +58,32 @@ class AuthController extends Controller
         return $this->createNewToken($access_token);
     }
 
-    public function refresh() {
-        $access_token = auth('api')->claims(['xtype' => 'auth'])->refresh(true,true);
-        auth('api')->setToken($access_token); 
+    public function refresh(Request $request) {
+        $rules = [
+            'token' => 'required'
+        ];
 
-        return $this->createNewToken($access_token);
+        $isValid = Validator::make($request->all(),$rules);
+        if($isValid->fails())
+            return response(['errors' => $isValid->errors()], 422);
+        
+        
+        $refresh_token = auth('api')->setToken($request->input('token'))->payload();
+        if($refresh_token->get('xtype') == 'refresh'){
+            $today = date('ymdhis');
+            if($today < date('ymdhis',$refresh_token->get('exp'))){
+                    $access_token = auth('api')->claims(['xtype' => 'auth'])->refresh(true,true);
+                    auth('api')->setToken($access_token); 
+                    return $this->createNewToken($access_token);
+            }else{
+                return response(['error' => 'Refresh Token expired'], 422);
+            }
+        }else{
+            return response(['Refresh token invalid'], 422);
+        }
     }
 
     protected function createNewToken($access_token){
-        // $response_array = [
-        //     'accessToken' => $access_token,
-        //     // 'token_type' => 'bearer',
-        //     // 'access_expires_in' => auth('api')->factory()->getTTL() * 60,
-        //     // 'user' => auth('api')->user(),
-        // ];
-    
-        // $access_token_obj = Token::create([
-        //     'user_id' => auth('api')->user()->id,
-        //     'value' => $access_token, //or auth('api')->getToken()->get();
-        //     'jti' => auth('api')->payload()->get('jti'),
-        //     'type' => auth('api')->payload()->get('xtype'),
-        //     'payload' => auth('api')->payload()->toArray(),
-        // ]);
     
         $refresh_token = auth('api')->claims([
             'xtype' => 'refresh',
@@ -91,22 +91,16 @@ class AuthController extends Controller
             ])->setTTL(auth('api')->factory()->getTTL() * 3)->tokenById(auth('api')->user()->id);
     
         
-    
         $rt = new Token;
-        $rt->user_id = auth('api')->user()->id;
+        $rt->id_user = auth('api')->user()->id;
         $rt->value = $refresh_token;
         $rt->jti = auth('api')->setToken($refresh_token)->payload()->get('jti');
         $rt->type = auth('api')->setToken($refresh_token)->payload()->get('xtype');
-        // $rt->payload = auth('api')->setToken($refresh_token)->payload()->toArray();
         $rt->save();
     
-        // $access_token_obj->pair = $refresh_token_obj->id;
-        // $access_token_obj->save();
         $response_array =[
             'accessToken' => $access_token,
-            'refreshToken' => $refresh_token,
-            'payload' => auth('api')->setToken($refresh_token)->payload()->toArray()
-            // 'refresh_expires_in' => auth('api')->factory()->getTTL() * 60
+            'refreshToken' => $refresh_token
         ];
     
         return response()->json($response_array);

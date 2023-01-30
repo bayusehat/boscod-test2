@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/register','App\Http\Controllers\Api\AuthController@register');
 Route::post('/login','App\Http\Controllers\Api\AuthController@login');
+Route::post('/update-token','App\Http\Controllers\Api\AuthController@refresh');
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('update-token','App\Http\Controllers\Api\AuthController@refresh');
+    Route::post('/transfer','App\Http\Controllers\Api\TransaksiController@createTransfer');
+    Route::get('/bank','App\Http\Controllers\Api\TransaksiController@listBank');
 });
