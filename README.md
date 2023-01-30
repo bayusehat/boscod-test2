@@ -1,66 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dokumentasi API dan contoh
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### 1.  Register
 
-## About Laravel
+#### HTTP Request
+```json
+POST http://127.0.0.1:8000/api/register
+```
+#### Parameters
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Parameters    |               | Description  |
+| ------------- |:-------------:| -------------|
+| name   | required	  	| Nama user |
+| email   | required	  	| E-mail user |
+| password   | required	  	| Password user yang nantinya digunakan untuk login |
+| password_confirmation   | required	  	| Sebagai validasi atas isian password yang kita tulis sebelumnya |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+#### Result
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Parameters    |  Description  |
+| ------------- |:--------------|
+|success| `true` Jika berhasil register. `false` Jika tidak berhasil register |
+|user | Menampilkan data user yang berhasil register|
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Example
+```json
+curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/register -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+```
+```json
+{
+    "success": true,
+    "user": {
+        "name": "Somak",
+        "email": "somak@gmail.com",
+        "updated_at": "2023-01-30T07:22:31.000000Z",
+        "created_at": "2023-01-30T07:22:31.000000Z",
+        "id": 2
+    }
+}
+```
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+### 2.  Login
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+#### HTTP Request
+```json
+POST http://127.0.0.1:8000/api/login
+```
+#### Parameters
 
-## Contributing
+| Parameters    |               | Description  |
+| ------------- |:-------------:| -------------|
+| email   | required	  	| E-mail user yang telah didaftarkan melalui register |
+| password   | required	  	| Password user yang telah didaftarkan melalui register |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Result
 
-## Security Vulnerabilities
+| Parameters    |  Description  |
+| ------------- |:--------------|
+|accessToken | Sebagai token untuk consume API |
+|refreshToken | Sebagai token untuk merefresh `accesToken` |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+#### Example
+```json
+curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/login -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+```
+```json
+{
+    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxx",
+    "refreshToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxx"
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+### 3. Update Token
+
+#### HTTP Request
+```json
+POST http://127.0.0.1:8000/api/update-token
+```
+#### Parameters
+
+| Parameters    |               | Description  |
+| ------------- |:-------------:| -------------|
+| token   | required	  	| token yang akan dikiriman adalah `refreshToken` yang telah didapat dari login |
+
+
+
+
+#### Result
+
+| Parameters    |  Description  |
+| ------------- |:--------------|
+|accessToken | Sebagai token untuk consume API yang telah diperbarui |
+|refreshToken | Sebagai token untuk merefresh `accesToken` |
+
+
+#### Example
+```json
+curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/update-token -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+```
+```json
+{
+    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxx",
+    "refreshToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxx"
+}
+```
+
+
+
+### 3. Transfer
+
+#### HTTP Request
+```json
+POST http://127.0.0.1:8000/api/
+```
+#### Parameters
+
+| Parameters    |               | Description  |
+| ------------- |:-------------:| -------------|
+|Authorization (headers)   | required	  	|  Berisi `accessToken` yang telah didapatkan setelah login |
+|nilai_transfer | required | Jumlah nilai transfer yang akan dikirim |
+|bank_tujuan | required | Nama bank penerima yang akan dituju |
+|rekening_tujuan | required | Nomor rekening penerima dari bank yang dituju |
+|atasnama_tujuan | required | Nama pemilik nomor rekening yang dituju |
+|bank_pengirim | required | Nama bank yang menjadi pengirim |
+ 
+
+
+
+#### Result
+
+| Parameters    |  Description  |
+| ------------- |:--------------|
+|id_transaksi | ID transaksi yang telah dilakukan |
+|nilai_transfer | Jumlah uang yang dikirimkan |
+|kode_unik | Kode unik untuk setiap transaksi admin |
+|total_transfer | Jumlah uang yang dikirimkan ditambah dengan kode unik |
+|bank_perantara | Nama bank yang menjembatani dari bank pengirim ke penerima |
+|expired_transfer | Batas waktu transfer dari pengirim ke Platform APP |
+
+
+#### Example
+```json
+curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/transfer -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+```
+```json
+{
+    "id_transaksi": "TF30012300002",
+    "nilai_transfer": 300000,
+    "kode_unik": 171,
+    "total_transfer": 300171,
+    "bank_perantara": "BCA",
+    "rekening_perantara": "029399030493",
+    "expired_transfer": "2023-01-30 08:38:03"
+}
+```
