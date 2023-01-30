@@ -1,6 +1,6 @@
 # Configurasi file
 1. run `composer install` untuk download vendor
-2. Setelah selesai jalankan perintah `php aritsan migrate` untuk generate database
+2. Setelah selesai jalankan perintah `php artisan migrate` untuk generate database
 
 # Dokumentasi API dan contoh
 
