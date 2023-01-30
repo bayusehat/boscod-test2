@@ -90,14 +90,6 @@ class AuthController extends Controller
             'xpair' => auth('api')->payload()->get('jti')
             ])->setTTL(auth('api')->factory()->getTTL() * 3)->tokenById(auth('api')->user()->id);
     
-        
-        $rt = new Token;
-        $rt->id_user = auth('api')->user()->id;
-        $rt->value = $refresh_token;
-        $rt->jti = auth('api')->setToken($refresh_token)->payload()->get('jti');
-        $rt->type = auth('api')->setToken($refresh_token)->payload()->get('xtype');
-        $rt->save();
-    
         $response_array =[
             'accessToken' => $access_token,
             'refreshToken' => $refresh_token

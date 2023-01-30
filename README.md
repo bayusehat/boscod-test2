@@ -1,3 +1,7 @@
+# Configurasi file
+1. run `composer install` untuk download vendor
+2. Setelah selesai jalankan perintah `php aritsan migrate` untuk generate database
+
 # Dokumentasi API dan contoh
 
 ### 1.  Register
@@ -27,7 +31,7 @@ POST http://127.0.0.1:8000/api/register
 
 #### Example
 ```json
-curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/register -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+curl -X POST -H 'Content-Type: application/json' -d '{"name": "Somak","email": "somak@gmail.com","password": "Hello123#", "password_confirmation" : "Hello123#"}' https://127.0.0.1:8000/api/register
 ```
 ```json
 {
@@ -69,7 +73,7 @@ POST http://127.0.0.1:8000/api/login
 
 #### Example
 ```json
-curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/login -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+curl -X POST -H 'Content-Type: application/json' -d '{"email": "somak@gmail.com","password": "Hello123#"}' https://127.0.0.1:8000/api/login
 ```
 ```json
 {
@@ -106,7 +110,7 @@ POST http://127.0.0.1:8000/api/update-token
 
 #### Example
 ```json
-curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/update-token -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+curl -X POST -H 'Content-Type: application/json' -d '{"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxx"}' https://127.0.0.1:8000/api/register
 ```
 ```json
 {
@@ -121,7 +125,7 @@ curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/update-token -X POST -d 
 
 #### HTTP Request
 ```json
-POST http://127.0.0.1:8000/api/
+POST http://127.0.0.1:8000/api/trasfer
 ```
 #### Parameters
 
@@ -151,7 +155,7 @@ POST http://127.0.0.1:8000/api/
 
 #### Example
 ```json
-curl -u 7:znn36aVeGrtJ2K9Vev6 http://127.0.0.1:8000/api/transfer -X POST -d '{"force": "0"}' -H "Content-Type: application/json"
+curl -X POST -H 'Content-Type: application/json' -H 'Bearer (Token)' -d ' {"nilai_transfer": 300000,"bank_tujuan": "BCA", "rekening_tujuan" : "12398210", "atasnama_tujuan" : "Hendro", "bank_pengirim" : "BNI" }' https://127.0.0.1:8000/api/transfer
 ```
 ```json
 {
